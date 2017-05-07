@@ -17,23 +17,25 @@ while(true) {
         $response = $j['response'];
         if(isset($response['items'])){
             $items = $response['items'];
-            $text = $items[0]['body'];
-            $read = $items[0]['read_state'];
-            $uid = $items[0]['user_id'];
-            $mid = $items[0]['id'];
-            foreach ($messages_layers as $key => $answer) {
-                if ($text == $key) {
-                    $random_value = microtime(true);
-                    $request_params = [
-                        'user_id' => $uid,
-                        'random_id' => $random_value,
-                        'message' => $answer,
-                        'v' => '5.62',
-                        'access_token' => TOKEN
-                    ];
-                    if ($mid !== $random_value) {
-                        $url = API_METHOD_URL."messages.send?" . http_build_query($request_params);
-                        file_get_contents($url);
+            foreach ($items as $item){
+                $text = strtolower($item['body']);
+                $read_state = $item['read_state'];
+                $user_id = $item['user_id'];
+                $mid = $item['id'];
+                foreach ($messages_layers as $key => $answer) {
+                    if ($text == $key) {
+                        $random_value = microtime(true);
+                        $request_params = [
+                            'user_id' => $user_id,
+                            'random_id' => $random_value,
+                            'message' => $answer,
+                            'v' => '5.62',
+                            'access_token' => TOKEN
+                        ];
+                        if ($mid !== $random_value) {
+                            $url = API_METHOD_URL."messages.send?" . http_build_query($request_params);
+                            file_get_contents($url);
+                        }
                     }
                 }
             }
