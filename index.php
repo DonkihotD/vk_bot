@@ -3,6 +3,7 @@
 const TOKEN = "";
 const TIMEOUT_REFRESH = 0.5;
 const API_METHOD_URL = "https://api.vk.com/method/";
+const API_VERSION = 5.64;
 
 /** @var array $messages_layers */
 $messages_layers = [
@@ -16,7 +17,7 @@ $messages_layers = [
 $answered_messages = [];
 
 while(true) {
-    $j = json_decode(file_get_contents(API_METHOD_URL."messages.get?count=1&out=0&time_offset=30&v=5.62&access_token=" . TOKEN), true);
+    $j = json_decode(file_get_contents(API_METHOD_URL."messages.get?count=1&out=0&time_offset=30&v=" . API_VERSION . "&access_token=" . TOKEN), true);
     //print_r($j);
     if(isset($j['response'])){
         $response = $j['response'];
@@ -35,7 +36,7 @@ while(true) {
                                 'user_id' => $user_id,
                                 'random_id' => $random_value,
                                 'message' => $answer,
-                                'v' => '5.62',
+                                'v' => API_VERSION,
                                 'access_token' => TOKEN
                             ];
                             $url = API_METHOD_URL . "messages.send?" . http_build_query($request_params);
